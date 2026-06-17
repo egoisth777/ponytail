@@ -18,3 +18,8 @@ __pycache__/
 announce-*.png
 changelog-*.png
 ponytail-*.gif
+
+# local agent workspace + knowledge base (scratch, machine-local)
+.arca/
+# root dev-guidance symlink into .arca (local only; NOT the tracked AGENTS.md)
+/CLAUDE.md
