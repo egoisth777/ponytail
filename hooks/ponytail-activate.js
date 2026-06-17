@@ -12,7 +12,6 @@ const { getDefaultMode, getClaudeDir } = require('./ponytail-config');
 const { getPonytailInstructions } = require('./ponytail-instructions');
 const {
   clearMode,
-  isCodex,
   setMode,
   writeHookOutput,
 } = require('./ponytail-runtime');
@@ -25,7 +24,7 @@ const mode = getDefaultMode();
 // "off" mode — skip activation entirely, don't write flag or emit rules
 if (mode === 'off') {
   clearMode();
-  writeHookOutput('SessionStart', 'off', isCodex ? '' : 'OK');
+  writeHookOutput('SessionStart', 'off', 'OK');
   process.exit(0);
 }
 
@@ -40,7 +39,7 @@ try {
 let output = getPonytailInstructions(mode);
 
 // 3. Detect missing statusline config — nudge Claude to help set it up
-if (!isCodex) try {
+try {
   let hasStatusline = false;
   if (fs.existsSync(settingsPath)) {
     const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));

@@ -1,0 +1,55 @@
+{
+  "upstream": {
+    "url": "https://github.com/DietrichGebert/ponytail.git",
+    "branch": "main"
+  },
+  "allow": [
+    "skills",
+    "hooks/ponytail-config.js",
+    "hooks/ponytail-instructions.js",
+    "hooks/ponytail-activate.js",
+    "hooks/ponytail-mode-tracker.js",
+    "hooks/ponytail-runtime.js",
+    "hooks/ponytail-statusline.ps1",
+    "hooks/ponytail-statusline.sh",
+    "scripts/check-rule-copies.js",
+    "pi-extension",
+    "benchmarks",
+    "tests"
+  ],
+  "deny": [
+    ".agents",
+    ".claude-plugin",
+    ".codex-plugin",
+    ".openclaw",
+    ".opencode",
+    ".cursor",
+    ".windsurf",
+    ".clinerules",
+    ".kiro",
+    ".github/plugin",
+    ".github/copilot-instructions.md",
+    "commands",
+    "gemini-extension.json",
+    "opencode.json",
+    "hooks/hooks.json",
+    "scripts/build-openclaw-skills.js",
+    "tests/hooks-windows.test.js",
+    "tests/openclaw-skills.test.js",
+    "tests/opencode-plugin.test.js",
+    "tests/gemini-extension.test.js",
+    "tests/commands.test.js",
+    "tests/copilot-plugin.test.js"
+  ],
+  "preserve": [
+    "install.ps1",
+    "install.sh",
+    "update.ps1",
+    "update.sh",
+    "uninstall.ps1",
+    "uninstall.sh",
+    "README.md",
+    "docs/agent-portability.md"
+  ],
+  "regenerate": []
+}

@@ -1,0 +1,131 @@
+name: sync upstream
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 9 * * 1'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Configure git
+        run: |
+          git config user.name "ponytail-sync[bot]"
+          git config user.email "ponytail-sync[bot]@users.noreply.github.com"
+          git remote set-url --push upstream DISABLED 2>/dev/null || true
+
+      - name: Deterministic upstream sync
+        run: node scripts/sync-upstream.js
+
+      - name: Check rule copies
+        id: copies1
+        continue-on-error: true
+        run: node scripts/check-rule-copies.js
+
+      - name: Check fork sync policy
+        id: policy1
+        continue-on-error: true
+        run: node scripts/check-sync-policy.js
+
+      - name: Run tests
+        id: tests1
+        continue-on-error: true
+        run: npm test 2>&1 | tee sync-test.log
+
+      - name: Assess repair need
+        id: assess
+        run: |
+          needs_repair=false
+          if [ "${{ steps.copies1.outcome }}" != "success" ] || [ "${{ steps.policy1.outcome }}" != "success" ] || [ "${{ steps.tests1.outcome }}" != "success" ]; then
+            needs_repair=true
+          fi
+          echo "needs_repair=$needs_repair" >> "$GITHUB_OUTPUT"
+
+      - name: GLM repair
+        if: steps.assess.outputs.needs_repair == 'true'
+        id: glm
+        continue-on-error: true
+        env:
+          GLM_API_KEY: ${{ secrets.GLM_API_KEY }}
+          GLM_BASE_URL: ${{ vars.GLM_BASE_URL }}
+          GLM_MODEL: ${{ vars.GLM_MODEL }}
+          SYNC_TEST_LOG: sync-test.log
+        run: node scripts/glm-repair.js
+
+      - name: Recheck fork sync policy
+        id: policy2
+        continue-on-error: true
+        run: node scripts/check-sync-policy.js
+
+      - name: Recheck rule copies
+        id: copies2
+        continue-on-error: true
+        run: node scripts/check-rule-copies.js
+
+      - name: Rerun tests
+        id: tests2
+        continue-on-error: true
+        run: npm test 2>&1 | tee sync-test.log
+
+      - name: Write PR body
+        id: body
+        run: |
+          status="PASS"
+          if [ "${{ steps.copies2.outcome }}" != "success" ] || [ "${{ steps.policy2.outcome }}" != "success" ] || [ "${{ steps.tests2.outcome }}" != "success" ]; then
+            status="NEEDS REVIEW"
+          fi
+          {
+            echo "Upstream sync status: $status"
+            echo
+            echo "- Deterministic sync: complete"
+            echo "- Initial rule-copy check: ${{ steps.copies1.outcome }}"
+            echo "- Initial policy check: ${{ steps.policy1.outcome }}"
+            echo "- Initial tests: ${{ steps.tests1.outcome }}"
+            echo "- GLM repair: ${{ steps.glm.outcome || 'skipped' }}"
+            echo "- Final rule-copy check: ${{ steps.copies2.outcome }}"
+            echo "- Final policy check: ${{ steps.policy2.outcome }}"
+            echo "- Final tests: ${{ steps.tests2.outcome }}"
+            echo
+            echo "Fork policy: no Claude marketplace packaging, no Codex plugin manifest, keep local installers."
+          } > pr-body.md
+
+      - name: Create pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet --exit-code && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+            echo "No upstream sync changes."
+            exit 0
+          fi
+
+          branch="sync/upstream-${GITHUB_RUN_ID}"
+          git checkout -b "$branch"
+          git add -A
+          git commit -m "sync upstream ponytail"
+          git push --force-with-lease origin "$branch"
+
+          if gh pr create --base main --head "$branch" --title "Sync upstream Ponytail" --body-file pr-body.md; then
+            exit 0
+          fi
+
+          pr_number=$(gh pr list --head "$branch" --json number --jq '.[0].number')
+          if [ -n "$pr_number" ]; then
+            gh pr edit "$pr_number" --body-file pr-body.md
+          fi

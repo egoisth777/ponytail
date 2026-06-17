@@ -5,7 +5,10 @@
   "keywords": ["pi-package", "pi", "skills", "ponytail"],
   "license": "MIT",
   "scripts": {
-    "test": "node --test tests/*.test.js && npm test --prefix pi-extension"
+    "test": "node --test tests/*.test.js && npm test --prefix pi-extension",
+    "sync:upstream": "node scripts/sync-upstream.js",
+    "sync:check": "node scripts/check-sync-policy.js",
+    "sync:glm-repair": "node scripts/glm-repair.js"
   },
   "pi": {
     "extensions": ["./pi-extension/index.js"],

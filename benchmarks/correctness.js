@@ -182,9 +182,27 @@ setTimeout(() => {
     // Also try open() calls
     patched = patched.replace(/open\(\s*['"]sales\.csv['"]/g, `open('${csvPath}'`);
 
-    const harness = `
+const harness = `
 import sys, os
 os.chdir(r"${path.dirname(csvPath)}")
+
+# ponytail: tiny pandas fallback covers read_csv + column sum; install pandas
+# if benchmark answers need broader pandas behavior.
+try:
+    import pandas
+except ModuleNotFoundError:
+    import csv as _csv, types
+    class _Series(list):
+        def sum(self):
+            return sum(float(x) for x in self)
+    class _Frame(dict):
+        def __getitem__(self, key):
+            return _Series(super().__getitem__(key))
+    def _read_csv(filename):
+        with open(filename, newline='') as f:
+            rows = list(_csv.DictReader(f))
+        return _Frame({name: [row[name] for row in rows] for name in rows[0]})
+    sys.modules['pandas'] = types.SimpleNamespace(read_csv=_read_csv)
 
 # Capture print output
 import io

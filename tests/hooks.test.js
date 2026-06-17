@@ -22,48 +22,9 @@ delete process.env.CLAUDE_CONFIG_DIR;
 
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'ponytail-hooks-'));
 const home = path.join(temp, 'home');
-const pluginData = path.join(temp, 'plugin-data');
 fs.mkdirSync(home, { recursive: true });
 
 // USERPROFILE alongside HOME: os.homedir() reads USERPROFILE on Windows, HOME on POSIX.
-const codexEnv = {
-  HOME: home,
-  USERPROFILE: home,
-  PLUGIN_DATA: pluginData,
-  PONYTAIL_DEFAULT_MODE: 'ultra',
-};
-const codexState = path.join(pluginData, '.ponytail-active');
-
-let result = run('ponytail-activate.js', codexEnv);
-assert.equal(result.status, 0, result.stderr);
-assert.equal(fs.readFileSync(codexState, 'utf8'), 'ultra');
-let output = JSON.parse(result.stdout);
-assert.equal(output.systemMessage, 'PONYTAIL:ULTRA');
-assert.match(
-  output.hookSpecificOutput.additionalContext,
-  /PONYTAIL MODE ACTIVE — level: ultra/,
-);
-
-result = run(
-  'ponytail-mode-tracker.js',
-  codexEnv,
-  JSON.stringify({ prompt: '@ponytail lite' }),
-);
-assert.equal(result.status, 0, result.stderr);
-assert.equal(fs.readFileSync(codexState, 'utf8'), 'lite');
-output = JSON.parse(result.stdout);
-assert.equal(output.systemMessage, 'PONYTAIL:LITE');
-
-result = run(
-  'ponytail-mode-tracker.js',
-  codexEnv,
-  JSON.stringify({ prompt: 'normal mode' }),
-);
-assert.equal(result.status, 0, result.stderr);
-assert.equal(fs.existsSync(codexState), false);
-output = JSON.parse(result.stdout);
-assert.equal(output.systemMessage, 'PONYTAIL:OFF');
-
 const claudeEnv = {
   HOME: home,
   USERPROFILE: home,
@@ -71,7 +32,7 @@ const claudeEnv = {
 };
 delete claudeEnv.PLUGIN_DATA;
 
-result = run('ponytail-activate.js', claudeEnv);
+let result = run('ponytail-activate.js', claudeEnv);
 assert.equal(result.status, 0, result.stderr);
 assert.equal(
   fs.readFileSync(path.join(home, '.claude', '.ponytail-active'), 'utf8'),
@@ -100,22 +61,22 @@ assert.equal(
 );
 
 const copilotData = path.join(temp, 'copilot-data');
-const codexData = path.join(temp, 'codex-data-shadow');
+const strayPluginData = path.join(temp, 'plugin-data-shadow');
 result = run('ponytail-activate.js', {
   HOME: home,
   USERPROFILE: home,
   COPILOT_PLUGIN_DATA: copilotData,
-  PLUGIN_DATA: codexData,
+  PLUGIN_DATA: strayPluginData,
   PONYTAIL_DEFAULT_MODE: 'full',
 });
 assert.equal(result.status, 0, result.stderr);
 assert.equal(fs.readFileSync(path.join(copilotData, '.ponytail-active'), 'utf8'), 'full');
 assert.equal(
-  fs.existsSync(path.join(codexData, '.ponytail-active')),
+  fs.existsSync(path.join(strayPluginData, '.ponytail-active')),
   false,
-  'copilot hooks must not write mode state to codex PLUGIN_DATA',
+  'copilot hooks must not write mode state to stray PLUGIN_DATA',
 );
-output = JSON.parse(result.stdout);
+let output = JSON.parse(result.stdout);
 assert.match(output.additionalContext, /PONYTAIL MODE ACTIVE — level: full/);
 
 result = run(
@@ -124,16 +85,16 @@ result = run(
     HOME: home,
     USERPROFILE: home,
     COPILOT_PLUGIN_DATA: copilotData,
-    PLUGIN_DATA: codexData,
+    PLUGIN_DATA: strayPluginData,
   },
   JSON.stringify({ prompt: '/ponytail ultra' }),
 );
 assert.equal(result.status, 0, result.stderr);
 assert.equal(fs.readFileSync(path.join(copilotData, '.ponytail-active'), 'utf8'), 'ultra');
 assert.equal(
-  fs.existsSync(path.join(codexData, '.ponytail-active')),
+  fs.existsSync(path.join(strayPluginData, '.ponytail-active')),
   false,
-  'copilot mode tracker must keep codex PLUGIN_DATA untouched',
+  'copilot mode tracker must keep stray PLUGIN_DATA untouched',
 );
 output = JSON.parse(result.stdout);
 assert.deepEqual(output, {});
