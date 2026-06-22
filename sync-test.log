@@ -1,0 +1,167 @@
+
+> ponytail@0.1.0 test
+> node --test tests/*.test.js && npm test --prefix pi-extension
+
+TAP version 13
+# Subtest: hardware: calibration knob / drift acknowledged passes
+ok 1 - hardware: calibration knob / drift acknowledged passes
+  ---
+  duration_ms: 1.559487
+  type: 'test'
+  ...
+# Subtest: hardware: real-model phrasing (tuning knobs / reads off) passes
+ok 2 - hardware: real-model phrasing (tuning knobs / reads off) passes
+  ---
+  duration_ms: 0.293338
+  type: 'test'
+  ...
+# Subtest: hardware: ideal-device assumption fails
+ok 3 - hardware: ideal-device assumption fails
+  ---
+  duration_ms: 0.1508
+  type: 'test'
+  ...
+# Subtest: explanation: full requested write-up passes
+ok 4 - explanation: full requested write-up passes
+  ---
+  duration_ms: 0.331464
+  type: 'test'
+  ...
+# Subtest: explanation: terse truncation fails
+ok 5 - explanation: terse truncation fails
+  ---
+  duration_ms: 0.189907
+  type: 'test'
+  ...
+# Subtest: onecheck: leaves an assert passes
+ok 6 - onecheck: leaves an assert passes
+  ---
+  duration_ms: 0.281531
+  type: 'test'
+  ...
+# Subtest: onecheck: no check fails
+ok 7 - onecheck: no check fails
+  ---
+  duration_ms: 1.095019
+  type: 'test'
+  ...
+# Subtest: unknown probe is skipped
+ok 8 - unknown probe is skipped
+  ---
+  duration_ms: 0.251417
+  type: 'test'
+  ...
+# Subtest: email: correct one-liner passes
+ok 9 - email: correct one-liner passes
+  ---
+  duration_ms: 40.097173
+  type: 'test'
+  ...
+# Subtest: email: always-true validator fails
+ok 10 - email: always-true validator fails
+  ---
+  duration_ms: 15.394191
+  type: 'test'
+  ...
+# Subtest: email: no code block fails
+ok 11 - email: no code block fails
+  ---
+  duration_ms: 0.208374
+  type: 'test'
+  ...
+# Subtest: debounce: correct implementation passes
+ok 12 - debounce: correct implementation passes
+  ---
+  duration_ms: 157.059443
+  type: 'test'
+  ...
+# Subtest: debounce: immediate-call implementation fails
+ok 13 - debounce: immediate-call implementation fails
+  ---
+  duration_ms: 47.192926
+  type: 'test'
+  ...
+# Subtest: csv: correct pandas one-liner passes
+not ok 14 - csv: correct pandas one-liner passes
+  ---
+  duration_ms: 22.695318
+  type: 'test'
+  location: '/home/runner/work/ponytail/ponytail/tests/correctness.test.js:77:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/home/runner/work/ponytail/ponytail/tests/correctness.test.js:85:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: csv: code that prints wrong value fails
+ok 15 - csv: code that prints wrong value fails
+  ---
+  duration_ms: 28.612079
+  type: 'test'
+  ...
+# Subtest: csv: value containing 351 as substring fails (e.g. 13510)
+ok 16 - csv: value containing 351 as substring fails (e.g. 13510)
+  ---
+  duration_ms: 23.267343
+  type: 'test'
+  ...
+# Subtest: countdown: valid React component passes
+ok 17 - countdown: valid React component passes
+  ---
+  duration_ms: 0.672822
+  type: 'test'
+  ...
+# Subtest: countdown: static div without state fails
+ok 18 - countdown: static div without state fails
+  ---
+  duration_ms: 0.538757
+  type: 'test'
+  ...
+# Subtest: ratelimit: FastAPI with limit logic passes
+ok 19 - ratelimit: FastAPI with limit logic passes
+  ---
+  duration_ms: 0.384752
+  type: 'test'
+  ...
+# Subtest: ratelimit: plain endpoint without limiting fails
+ok 20 - ratelimit: plain endpoint without limiting fails
+  ---
+  duration_ms: 0.197619
+  type: 'test'
+  ...
+# Subtest: unknown task is gracefully skipped
+ok 21 - unknown task is gracefully skipped
+  ---
+  duration_ms: 0.292577
+  type: 'test'
+  ...
+# hook compatibility checks passed
+# Subtest: tests/hooks.test.js
+ok 3 - tests/hooks.test.js
+  ---
+  duration_ms: 336.82409
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 21
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 404.28578
