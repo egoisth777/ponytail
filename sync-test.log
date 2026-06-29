@@ -1,0 +1,482 @@
+
+> ponytail@0.1.0 test
+> node --test tests/*.test.js && npm test --prefix pi-extension
+
+TAP version 13
+# Subtest: hardware: calibration knob / drift acknowledged passes
+ok 1 - hardware: calibration knob / drift acknowledged passes
+  ---
+  duration_ms: 1.277136
+  type: 'test'
+  ...
+# Subtest: hardware: real-model phrasing (tuning knobs / reads off) passes
+ok 2 - hardware: real-model phrasing (tuning knobs / reads off) passes
+  ---
+  duration_ms: 0.324546
+  type: 'test'
+  ...
+# Subtest: hardware: ideal-device assumption fails
+ok 3 - hardware: ideal-device assumption fails
+  ---
+  duration_ms: 0.158066
+  type: 'test'
+  ...
+# Subtest: explanation: full requested write-up passes
+ok 4 - explanation: full requested write-up passes
+  ---
+  duration_ms: 0.335837
+  type: 'test'
+  ...
+# Subtest: explanation: terse truncation fails
+ok 5 - explanation: terse truncation fails
+  ---
+  duration_ms: 0.228607
+  type: 'test'
+  ...
+# Subtest: onecheck: leaves an assert passes
+ok 6 - onecheck: leaves an assert passes
+  ---
+  duration_ms: 0.256339
+  type: 'test'
+  ...
+# Subtest: onecheck: no check fails
+ok 7 - onecheck: no check fails
+  ---
+  duration_ms: 1.066794
+  type: 'test'
+  ...
+# Subtest: unknown probe is skipped
+ok 8 - unknown probe is skipped
+  ---
+  duration_ms: 0.256308
+  type: 'test'
+  ...
+# Subtest: email: correct one-liner passes
+ok 9 - email: correct one-liner passes
+  ---
+  duration_ms: 49.220565
+  type: 'test'
+  ...
+# Subtest: email: always-true validator fails
+ok 10 - email: always-true validator fails
+  ---
+  duration_ms: 21.255661
+  type: 'test'
+  ...
+# Subtest: email: no code block fails
+ok 11 - email: no code block fails
+  ---
+  duration_ms: 0.340766
+  type: 'test'
+  ...
+# Subtest: debounce: correct implementation passes
+ok 12 - debounce: correct implementation passes
+  ---
+  duration_ms: 166.230535
+  type: 'test'
+  ...
+# Subtest: debounce: immediate-call implementation fails
+ok 13 - debounce: immediate-call implementation fails
+  ---
+  duration_ms: 36.648159
+  type: 'test'
+  ...
+# Subtest: csv: correct pandas one-liner passes
+not ok 14 - csv: correct pandas one-liner passes
+  ---
+  duration_ms: 16.628667
+  type: 'test'
+  location: '/home/runner/work/ponytail/ponytail/tests/correctness.test.js:77:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/home/runner/work/ponytail/ponytail/tests/correctness.test.js:85:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: csv: code that prints wrong value fails
+ok 15 - csv: code that prints wrong value fails
+  ---
+  duration_ms: 29.324807
+  type: 'test'
+  ...
+# Subtest: csv: value containing 351 as substring fails (e.g. 13510)
+ok 16 - csv: value containing 351 as substring fails (e.g. 13510)
+  ---
+  duration_ms: 28.414261
+  type: 'test'
+  ...
+# Subtest: countdown: valid React component passes
+ok 17 - countdown: valid React component passes
+  ---
+  duration_ms: 0.682475
+  type: 'test'
+  ...
+# Subtest: countdown: static div without state fails
+ok 18 - countdown: static div without state fails
+  ---
+  duration_ms: 0.547793
+  type: 'test'
+  ...
+# Subtest: ratelimit: FastAPI with limit logic passes
+ok 19 - ratelimit: FastAPI with limit logic passes
+  ---
+  duration_ms: 0.39622
+  type: 'test'
+  ...
+# Subtest: ratelimit: plain endpoint without limiting fails
+ok 20 - ratelimit: plain endpoint without limiting fails
+  ---
+  duration_ms: 0.200134
+  type: 'test'
+  ...
+# Subtest: unknown task is gracefully skipped
+ok 21 - unknown task is gracefully skipped
+  ---
+  duration_ms: 0.288369
+  type: 'test'
+  ...
+# Subtest: Hermes plugin manifest matches runtime skills, hooks, commands, and package version
+not ok 22 - Hermes plugin manifest matches runtime skills, hooks, commands, and package version
+  ---
+  duration_ms: 2.137934
+  type: 'test'
+  location: '/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:30:1'
+  failureType: 'testCodeFailure'
+  error: 'missing root plugin.yaml'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:32:10)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.start (node:internal/test_runner/test:944:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)
+  ...
+# Subtest: Hermes plugin registers every shipped skill under the ponytail namespace
+not ok 23 - Hermes plugin registers every shipped skill under the ponytail namespace
+  ---
+  duration_ms: 40.947482
+  type: 'test'
+  location: '/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:47:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    python failed
+    STDOUT:
+    
+    STDERR:
+    Traceback (most recent call last):
+      File "<string>", line 5, in <module>
+      File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+      File "<frozen importlib._bootstrap_external>", line 1132, in get_code
+      File "<frozen importlib._bootstrap_external>", line 1190, in get_data
+    FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/ponytail/ponytail/__init__.py'
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    python (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:25:11)
+    TestContext.<anonymous> (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:48:18)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: Hermes plugin builds mode-aware injected context from the canonical skill
+not ok 24 - Hermes plugin builds mode-aware injected context from the canonical skill
+  ---
+  duration_ms: 30.345965
+  type: 'test'
+  location: '/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:83:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    python failed
+    STDOUT:
+    
+    STDERR:
+    Traceback (most recent call last):
+      File "<string>", line 5, in <module>
+      File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+      File "<frozen importlib._bootstrap_external>", line 1132, in get_code
+      File "<frozen importlib._bootstrap_external>", line 1190, in get_data
+    FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/ponytail/ponytail/__init__.py'
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    python (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:25:11)
+    TestContext.<anonymous> (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:85:18)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: Hermes mode config respects env, config file, off, and invalid command behavior
+not ok 25 - Hermes mode config respects env, config file, off, and invalid command behavior
+  ---
+  duration_ms: 34.613515
+  type: 'test'
+  location: '/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:102:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    python failed
+    STDOUT:
+    
+    STDERR:
+    Traceback (most recent call last):
+      File "<string>", line 5, in <module>
+      File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+      File "<frozen importlib._bootstrap_external>", line 1132, in get_code
+      File "<frozen importlib._bootstrap_external>", line 1190, in get_data
+    FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/ponytail/ponytail/__init__.py'
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    python (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:25:11)
+    TestContext.<anonymous> (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:106:18)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: Hermes plugin review mode injects the real review skill body
+not ok 26 - Hermes plugin review mode injects the real review skill body
+  ---
+  duration_ms: 33.595248
+  type: 'test'
+  location: '/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:138:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    python failed
+    STDOUT:
+    
+    STDERR:
+    Traceback (most recent call last):
+      File "<string>", line 5, in <module>
+      File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+      File "<frozen importlib._bootstrap_external>", line 1132, in get_code
+      File "<frozen importlib._bootstrap_external>", line 1190, in get_data
+    FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/ponytail/ponytail/__init__.py'
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    python (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:25:11)
+    TestContext.<anonymous> (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:139:18)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: Hermes /ponytail command changes mode and pre_llm_call injects current context
+not ok 27 - Hermes /ponytail command changes mode and pre_llm_call injects current context
+  ---
+  duration_ms: 33.974181
+  type: 'test'
+  location: '/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:154:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    python failed
+    STDOUT:
+    
+    STDERR:
+    Traceback (most recent call last):
+      File "<string>", line 5, in <module>
+      File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+      File "<frozen importlib._bootstrap_external>", line 1132, in get_code
+      File "<frozen importlib._bootstrap_external>", line 1190, in get_data
+    FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/ponytail/ponytail/__init__.py'
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    python (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:25:11)
+    TestContext.<anonymous> (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:155:18)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: Hermes gateway rewrite respects slash access denial
+not ok 28 - Hermes gateway rewrite respects slash access denial
+  ---
+  duration_ms: 25.43942
+  type: 'test'
+  location: '/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:179:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    python failed
+    STDOUT:
+    
+    STDERR:
+    Traceback (most recent call last):
+      File "<string>", line 5, in <module>
+      File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+      File "<frozen importlib._bootstrap_external>", line 1132, in get_code
+      File "<frozen importlib._bootstrap_external>", line 1190, in get_data
+    FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/ponytail/ponytail/__init__.py'
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    python (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:25:11)
+    TestContext.<anonymous> (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:180:18)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: Hermes gateway rewrite preserves every skill command and ignores unrelated text
+not ok 29 - Hermes gateway rewrite preserves every skill command and ignores unrelated text
+  ---
+  duration_ms: 25.766126
+  type: 'test'
+  location: '/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:201:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    python failed
+    STDOUT:
+    
+    STDERR:
+    Traceback (most recent call last):
+      File "<string>", line 5, in <module>
+      File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+      File "<frozen importlib._bootstrap_external>", line 1132, in get_code
+      File "<frozen importlib._bootstrap_external>", line 1190, in get_data
+    FileNotFoundError: [Errno 2] No such file or directory: '/home/runner/work/ponytail/ponytail/__init__.py'
+    
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    python (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:25:11)
+    TestContext.<anonymous> (/home/runner/work/ponytail/ponytail/tests/hermes-plugin.test.js:202:18)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# node:assert:150
+#   throw new AssertionError(obj);
+#   ^
+# AssertionError [ERR_ASSERTION]: node:internal/modules/cjs/loader:1433
+#   throw err;
+#   ^
+# Error: Cannot find module '/home/runner/work/ponytail/ponytail/hooks/ponytail-subagent.js'
+#     at Function._resolveFilename (node:internal/modules/cjs/loader:1430:15)
+#     at defaultResolveImpl (node:internal/modules/cjs/loader:1040:19)
+#     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1045:22)
+#     at Function._load (node:internal/modules/cjs/loader:1216:25)
+#     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+#     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+#     at node:internal/main/run_main_module:36:49 {
+#   code: 'MODULE_NOT_FOUND',
+#   requireStack: []
+# }
+# Node.js v22.23.0
+#     at Object.<anonymous> (/home/runner/work/ponytail/ponytail/tests/hooks.test.js:186:8)
+#     at Module._compile (node:internal/modules/cjs/loader:1781:14)
+#     at Object..js (node:internal/modules/cjs/loader:1913:10)
+#     at Module.load (node:internal/modules/cjs/loader:1505:32)
+#     at Function._load (node:internal/modules/cjs/loader:1309:12)
+#     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+#     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+#     at node:internal/main/run_main_module:36:49 {
+#   generatedMessage: false,
+#   code: 'ERR_ASSERTION',
+#   actual: 1,
+#   expected: 0,
+#   operator: '==',
+#   diff: 'simple'
+# }
+# Node.js v22.23.0
+# Subtest: tests/hooks.test.js
+not ok 4 - tests/hooks.test.js
+  ---
+  duration_ms: 429.101941
+  type: 'test'
+  location: '/home/runner/work/ponytail/ponytail/tests/hooks.test.js:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# node:assert:150
+#   throw new AssertionError(obj);
+#   ^
+# AssertionError [ERR_ASSERTION]: node:internal/modules/cjs/loader:1433
+#   throw err;
+#   ^
+# Error: Cannot find module '/home/runner/work/ponytail/ponytail/scripts/uninstall.js'
+#     at Function._resolveFilename (node:internal/modules/cjs/loader:1430:15)
+#     at defaultResolveImpl (node:internal/modules/cjs/loader:1040:19)
+#     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1045:22)
+#     at Function._load (node:internal/modules/cjs/loader:1216:25)
+#     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+#     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+#     at node:internal/main/run_main_module:36:49 {
+#   code: 'MODULE_NOT_FOUND',
+#   requireStack: []
+# }
+# Node.js v22.23.0
+#     at Object.<anonymous> (/home/runner/work/ponytail/ponytail/tests/uninstall.test.js:47:8)
+#     at Module._compile (node:internal/modules/cjs/loader:1781:14)
+#     at Object..js (node:internal/modules/cjs/loader:1913:10)
+#     at Module.load (node:internal/modules/cjs/loader:1505:32)
+#     at Function._load (node:internal/modules/cjs/loader:1309:12)
+#     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+#     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+#     at node:internal/main/run_main_module:36:49 {
+#   generatedMessage: false,
+#   code: 'ERR_ASSERTION',
+#   actual: 1,
+#   expected: 0,
+#   operator: '==',
+#   diff: 'simple'
+# }
+# Node.js v22.23.0
+# Subtest: tests/uninstall.test.js
+not ok 5 - tests/uninstall.test.js
+  ---
+  duration_ms: 79.542447
+  type: 'test'
+  location: '/home/runner/work/ponytail/ponytail/tests/uninstall.test.js:1:1'
+  failureType: 'testCodeFailure'
+  exitCode: 1
+  signal: ~
+  error: 'test failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..31
+# tests 31
+# suites 0
+# pass 20
+# fail 11
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 503.295924
