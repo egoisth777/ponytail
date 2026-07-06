@@ -2,12 +2,15 @@
 // ponytail — UserPromptSubmit hook to track which ponytail mode is active
 // Inspects user input for /ponytail commands and writes mode to flag file
 
-const { getDefaultMode } = require('./ponytail-config');
+const { getDefaultMode, isDeactivationCommand } = require('./ponytail-config');
 const { clearMode, setMode, writeHookOutput } = require('./ponytail-runtime');
 
 let input = '';
-process.stdin.on('data', chunk => { input += chunk; });
-process.stdin.on('end', () => {
+let done = false;
+
+function finish() {
+  if (done) return;
+  done = true;
   try {
     // Strip UTF-8 BOM some shells prepend when piping (breaks JSON.parse)
     const data = JSON.parse(input.replace(/^\uFEFF/, ''));
@@ -45,11 +48,24 @@ process.stdin.on('end', () => {
     }
 
     // Detect deactivation
-    if (/\b(stop ponytail|normal mode)\b/i.test(prompt)) {
+    if (isDeactivationCommand(prompt)) {
       clearMode();
       writeHookOutput('UserPromptSubmit', 'off', 'PONYTAIL MODE OFF');
     }
   } catch (e) {
     // Silent fail
   }
-});
+}
+
+process.stdin.on('data', chunk => { input += chunk; });
+process.stdin.on('end', finish);
+
+// Never hang the session. On Windows, Claude Code runs this hook through a
+// PowerShell `if {}` wrapper that can swallow the piped prompt JSON, so stdin
+// 'end' never fires and the hook blocks forever — freezing the session (#443).
+// On error, or after a short fallback, process whatever arrived (recovering the
+// mode if data came without EOF) and exit. unref() keeps the timer from adding
+// latency to the normal path, where 'end' fires first. Mirrors the best-effort,
+// never-block contract the other lifecycle hooks already follow.
+process.stdin.on('error', () => { finish(); process.exit(0); });
+setTimeout(() => { finish(); process.exit(0); }, 1000).unref();
