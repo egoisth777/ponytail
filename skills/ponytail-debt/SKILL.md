@@ -17,7 +17,7 @@ can't quietly become permanent.
 Grep the repo for comment markers, skipping `node_modules`, `.git`, and build
 output:
 
-`grep -rnE '(#|//) ?ponytail:' .`  (add other comment prefixes if your stack uses them)
+`grep -rnE --exclude-dir=.git --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build '(#|//|/[*]) ?ponytail:' .`  (add other comment prefixes if your stack uses them)
 
 Each hit is one ledger row. The comment prefix keeps prose that merely mentions
 the convention out of the ledger.
@@ -26,7 +26,7 @@ the convention out of the ledger.
 
 One row per marker, grouped by file:
 
-`<file>:<line> — <what was simplified>. ceiling: <the limit named>. upgrade: <the trigger to revisit>.`
+`<file>:<line>, <what was simplified>. ceiling: <the limit named>. upgrade: <the trigger to revisit>.`
 
 The convention is `ponytail: <ceiling>, <upgrade path>`, so pull the ceiling
 and the trigger straight from the comment. Want an owner per row too? add
