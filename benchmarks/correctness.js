@@ -5,11 +5,22 @@
 // Metric: `correct` (1 = all checks pass, 0 = at least one fails).
 // Unlike loc.js (measurement-only), this one is a gate — a wrong answer is a
 // wrong answer regardless of how few lines produced it.
+//
+// Note: email, debounce, and CSV checks execute the generated code against
+// real inputs. Countdown (React) and rate-limit (FastAPI) checks are
+// structural-only: they verify plausible code shape rather than runtime
+// behaviour, because a React bundler or a live FastAPI server is needed to
+// execute those properly.
 
 const { execSync } = require('child_process');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+
+function correctnessTimeoutMs() {
+  const value = Number.parseInt(process.env.PONYTAIL_CORRECTNESS_TIMEOUT_MS || '', 10);
+  return Number.isFinite(value) && value > 0 ? value : 30_000;
+}
 
 // Extract fenced code blocks, tagged by language.
 function extractBlocks(text) {
@@ -32,27 +43,27 @@ function identifyTask(task) {
   return null;
 }
 
-// Run a command, return { ok, stderr }.
+// Run a command, return { ok, stderr }. Harnesses that print FAIL to stdout
+// still get their reason through (#919).
 function exec(cmd, opts = {}) {
   try {
-    execSync(cmd, { timeout: 10_000, encoding: 'utf8', stdio: 'pipe', ...opts });
+    execSync(cmd, { timeout: correctnessTimeoutMs(), encoding: 'utf8', stdio: 'pipe', ...opts });
     return { ok: true, stderr: '' };
   } catch (e) {
-    return { ok: false, stderr: (e.stderr || e.message || '').slice(0, 500) };
+    return { ok: false, stderr: (e.stderr || e.stdout || e.message || '').slice(0, 500) };
   }
 }
 
 // ponytail: probe once at load; macOS and many Linux images ship python3 only.
+// Prefer one with pandas (the csv task needs it): on Windows python3 can be a
+// bundled Python without it while python has it (#919).
 let pythonCmd;
 function python() {
   if (pythonCmd) return pythonCmd;
-  for (const cmd of ['python3', 'python']) {
-    if (exec(`${cmd} -c "import sys"`).ok) {
-      pythonCmd = cmd;
-      return pythonCmd;
-    }
-  }
-  pythonCmd = 'python3';
+  const candidates = ['python3', 'python'];
+  pythonCmd = candidates.find((cmd) => exec(`${cmd} -c "import pandas"`).ok)
+    || candidates.find((cmd) => exec(`${cmd} -c "import sys"`).ok)
+    || 'python3';
   return pythonCmd;
 }
 
@@ -182,27 +193,9 @@ setTimeout(() => {
     // Also try open() calls
     patched = patched.replace(/open\(\s*['"]sales\.csv['"]/g, `open('${csvPath}'`);
 
-const harness = `
+    const harness = `
 import sys, os
 os.chdir(r"${path.dirname(csvPath)}")
-
-# ponytail: tiny pandas fallback covers read_csv + column sum; install pandas
-# if benchmark answers need broader pandas behavior.
-try:
-    import pandas
-except ModuleNotFoundError:
-    import csv as _csv, types
-    class _Series(list):
-        def sum(self):
-            return sum(float(x) for x in self)
-    class _Frame(dict):
-        def __getitem__(self, key):
-            return _Series(super().__getitem__(key))
-    def _read_csv(filename):
-        with open(filename, newline='') as f:
-            rows = list(_csv.DictReader(f))
-        return _Frame({name: [row[name] for row in rows] for name in rows[0]})
-    sys.modules['pandas'] = types.SimpleNamespace(read_csv=_read_csv)
 
 # Capture print output
 import io
@@ -211,10 +204,9 @@ sys.stdout = io.StringIO()
 
 try:
 ${patched.split('\n').map((l) => '    ' + l).join('\n')}
-except Exception as e:
+except Exception:
     sys.stdout = _stdout
-    # If it needs sales.csv in cwd, write it there and retry
-    pass
+    raise
 
 output = sys.stdout.getvalue()
 sys.stdout = _stdout
